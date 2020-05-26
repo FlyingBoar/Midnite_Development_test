@@ -10,8 +10,18 @@ public class GameManager : MonoBehaviour
     /// Reference to grid controller
     /// </summary>
     private GridController gridCtrl;
-
+    /// <summary>
+    /// Reference to the Ingredient controller
+    /// </summary>
     private IngredientsController ingredientsCtrl;
+    /// <summary>
+    /// Reference to Pool manager
+    /// </summary>
+    private PoolManager poolMng;
+    /// <summary>
+    /// Reference to Pool manager
+    /// </summary>
+    private GameController gameCtrl;
 
     /// <summary>
     /// Reference to the game state machine
@@ -56,6 +66,32 @@ public class GameManager : MonoBehaviour
         return I.ingredientsCtrl;
     }
 
+    /// <summary>
+    /// Get reference for the pool manager
+    /// </summary>
+    /// <returns></returns>
+    public PoolManager GetPoolManager()
+    {
+        return I.poolMng;
+    }
+
+    /// <summary>
+    /// Get reference for the game controller
+    /// </summary>
+    /// <returns></returns>
+    public GameController GetGameController()
+    {
+        return I.gameCtrl;
+    }
+
+    /// <summary>
+    /// Ritorna se la state machine è in gameplay
+    /// </summary>
+    /// <returns></returns>
+    public bool IsGameplay()
+    {
+        return SM.GetCurrentAnimatorStateInfo(0).IsName("Gameplay") ? true : false;
+    }
     #endregion
 
     #region Set
@@ -76,6 +112,25 @@ public class GameManager : MonoBehaviour
     {
         I.ingredientsCtrl = _ingredientsController;
     }
+
+    /// <summary>
+    /// Set the reference for the Pool manager
+    /// </summary>
+    /// <param name="_poolManager"></param>
+    public void SetPoolManager(PoolManager _poolManager)
+    {
+        I.poolMng = _poolManager;
+    }
+
+    /// <summary>
+    /// Set the reference for the Game controller
+    /// </summary>
+    /// <param name="_gameController"></param>
+    public void SetGameController(GameController _gameController)
+    {
+        I.gameCtrl = _gameController;
+    }
+
     #endregion
 
 

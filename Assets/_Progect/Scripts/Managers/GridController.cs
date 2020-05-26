@@ -5,16 +5,11 @@ using UnityEngine;
 
 public class GridController : MonoBehaviour
 {
-    [SerializeField] private float cellOffset;
-    [SerializeField] private float celldimensions;
     [SerializeField] private int gridDimension_x, gridDimension_y;
+    [SerializeField] private Cell cellPrefab;
+    private float spaceFromCellCenters = 1;
 
     Cell[,] cells;
-
-    private void Start()
-    {
-        Setup();
-    }
 
     /////////////////////////////////////////////
 
@@ -31,7 +26,7 @@ public class GridController : MonoBehaviour
         List<Cell> _neighbours = _cellToCheck.GetNeighbours();
         foreach (Cell c in _neighbours)
         {
-            if(c.GetIngredient().Count == 0)
+            if (c.GetIngredients().Count == 0)
             {
                 value = c;
                 break;
@@ -40,44 +35,34 @@ public class GridController : MonoBehaviour
         return value;
     }
 
+    /////////////////////////////////////////////
 
-    //public List<Cell> GetFreeCellFromNeighbours(int _cellRequired)
-    //{
-    //    List<Cell> valueToReturn = new List<Cell>();
+    public void Swipe(Cell _selectedCell, InputController.SwipeDirection _direction)
+    {
+        Cell c = GetCellByDirection(_selectedCell, _direction);
 
-    //    valueToReturn.Add(GetRandomCell());
+        if (_selectedCell == null || c == null)
+            return;
 
-    //    for (int i = 0; i < _cellRequired; i++)
-    //    {
-    //        Cell freeCell = null;
-    //        List<Cell> _neighbours = valueToReturn[i].GetNeighbours();
-    //        int randomIndex = 0;
+        if (_selectedCell.GetIngredients().Count > 0 && c.GetIngredients().Count > 0)
+        {
+            Vector3 newPos = new Vector3(c.GetWorldPosition().x, c.GetWorldPosition().y + c.GetIngredients().Count * Cell.ingredientOffset, c.GetWorldPosition().z);
 
-    //        do
-    //        {
-    //            if (_neighbours.Count > 0)
-    //            {
-    //                randomIndex = Random.Range(0, _neighbours.Count);
-    //                Cell cellToCheck = _neighbours[randomIndex];
-    //                if (!valueToReturn.Contains(cellToCheck))
-    //                    break;
-    //                else
-    //                    _neighbours.Remove(cellToCheck);
-    //            }
-    //            else
-    //                _neighbours = valueToReturn[i - 1].GetNeighbours();
-    //        }
-    //        while (true);
+            _selectedCell.MoveIngredients(newPos, _direction, () =>
+            {
+                if (_selectedCell.GetIngredients().Count > 1)
+                {
+                    for (int i = _selectedCell.GetIngredients().Count - 1; i >= 0; i--)
+                        c.AddIngredient(_selectedCell.GetIngredients()[i]);
+                }
+                else
+                    c.AddIngredient(_selectedCell.GetIngredients()[0]);
 
-    //        freeCell = _neighbours[randomIndex];
-
-    //        valueToReturn.Add(freeCell);
-
-    //    }
-
-    //    return valueToReturn;
-    //}
-
+                _selectedCell.ClearIngredients();
+                GameManager.I.GetGameController().CheckVictory();
+            });
+        }
+    }
 
     /////////////////////////////////////////////
 
@@ -92,6 +77,13 @@ public class GridController : MonoBehaviour
 
     /////////////////////////////////////////////
 
+    public Cell[,] GetCells()
+    {
+        return cells;
+    }
+
+    /////////////////////////////////////////////
+
     /// <summary>
     /// Create the grid
     /// </summary>
@@ -100,12 +92,15 @@ public class GridController : MonoBehaviour
     {
         Vector2 gridCenter = new Vector2(gridDimension_x / 2, gridDimension_y / 2);
         cells = new Cell[gridDimension_x, gridDimension_y];
-        for (int i = 0; i < gridDimension_x; i++)
+        for (int i = 0; i < gridDimension_y; i++)
         {
-            for (int j = 0; j < gridDimension_y; j++)
+            for (int j = 0; j < gridDimension_x; j++)
             {
-                Vector3 cellPosition = new Vector3(-(gridCenter.x - celldimensions / 2) + celldimensions * (i % gridDimension_x), 0, -(gridCenter.y) + (celldimensions + (j % gridDimension_y)));
-                cells[i, j] = new Cell(cellPosition, new Vector2(i, j));
+                Vector3 cellPosition = new Vector3(-(gridCenter.x - spaceFromCellCenters / 2) + spaceFromCellCenters * (j % gridDimension_x), 0, -(gridCenter.y - spaceFromCellCenters / 2) + (spaceFromCellCenters * (i % gridDimension_y)));
+                Cell newCell = Instantiate(cellPrefab, cellPosition, Quaternion.identity, transform);
+                newCell.gameObject.name = j + ":" + i;
+                newCell.Setup(cellPosition, new Vector2Int(j, i));
+                cells[j, i] = newCell;
             }
         }
     }
@@ -138,101 +133,46 @@ public class GridController : MonoBehaviour
         }
     }
 
-    public Cell[,] GetCells()
-    {
-        return cells;
-    }
-}
+    /////////////////////////////////////////////
 
-public class Cell
-{
-    Vector3 WorldPosition;
-    Vector2 GridPosition;
-    List<Cell> neighbours = new List<Cell>();
-    List<Ingredient> cellIngredients;
-
-    public Cell(Vector3 _worldPosition, Vector2 _gridPostion)
-    {
-        WorldPosition = _worldPosition;
-        GridPosition = _gridPostion;
-        cellIngredients = new List<Ingredient>();
-    }
-
-    #region API
-
-    public void AddIngredient(Ingredient _ingredientToAdd)
-    {
-        cellIngredients.Add(_ingredientToAdd);
-    }
-
-    #region Get
     /// <summary>
-    /// Return the ingredient contained in this cell, can return null
+    /// Return the cell next to the start cell given by direction 
     /// </summary>
+    /// <param name="_startCell"></param>
+    /// <param name="_direction"></param>
     /// <returns></returns>
-    public List<Ingredient> GetIngredient()
+    Cell GetCellByDirection(Cell _startCell, InputController.SwipeDirection _direction)
     {
-        return cellIngredients;
+        Cell value = null;
+        switch (_direction)
+        {
+            case InputController.SwipeDirection.Left:
+                if (_startCell.GetGridPosition().x > 0)
+                {
+                    value = cells[_startCell.GetGridPosition().x - 1, _startCell.GetGridPosition().y];
+                }
+                break;
+            case InputController.SwipeDirection.Right:
+                if (_startCell.GetGridPosition().x < gridDimension_x - 1)
+                {
+                    value = cells[_startCell.GetGridPosition().x + 1, _startCell.GetGridPosition().y];
+                }
+                break;
+            case InputController.SwipeDirection.Up:
+                if (_startCell.GetGridPosition().y < gridDimension_y - 1)
+                {
+                    value = cells[_startCell.GetGridPosition().x, _startCell.GetGridPosition().y + 1];
+                }
+                break;
+            case InputController.SwipeDirection.Down:
+                if (_startCell.GetGridPosition().y > 0)
+                {
+                    value = cells[_startCell.GetGridPosition().x, _startCell.GetGridPosition().y - 1];
+                }
+                break;
+            default:
+                break;
+        }
+        return value;
     }
-
-    /////////////////////////////////////////////
-
-    /// <summary>
-    /// Return the position in world space
-    /// </summary>
-    /// <returns></returns>
-    public Vector3 GetWorldPosition()
-    {
-        return WorldPosition;
-    }
-
-    /////////////////////////////////////////////
-
-    /// <summary>
-    /// Return the position inside the grid list
-    /// </summary>
-    /// <returns></returns>
-    public Vector2 GetGridPosition()
-    {
-        return GridPosition;
-    }
-
-    /////////////////////////////////////////////
-
-    /// <summary>
-    /// return the list of neighbours
-    /// </summary>
-    /// <returns></returns>
-    public List<Cell> GetNeighbours()
-    {
-        return neighbours;
-    }
-
-    #endregion
-
-    #region Set
-    /////////////////////////////////////////////
-    ///////////////    SET    ///////////////
-
-    /// <summary>
-    /// Set the ingredient contained in the cell
-    /// </summary>
-    /// <param name="_ingredient"></param>
-    public void SetIngredient(List<Ingredient> _ingredient)
-    {
-        cellIngredients = _ingredient;
-    }
-
-    /////////////////////////////////////////////
-
-    /// <summary>
-    /// Set the list of neighbours of the cell
-    /// </summary>
-    /// <param name="_neighbours"></param>
-    public void SetNeighbours(List<Cell> _neighbours)
-    {
-        neighbours = _neighbours;
-    }
-    #endregion
-    #endregion
 }

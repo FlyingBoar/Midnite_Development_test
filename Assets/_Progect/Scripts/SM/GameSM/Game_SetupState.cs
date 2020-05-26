@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Game_SetupState : StateMachineBehaviour
 {
@@ -13,10 +14,14 @@ public class Game_SetupState : StateMachineBehaviour
 
 
         /// Get references to components
+        GM.SetPoolManager(GM.GetComponentInChildren<PoolManager>());
         GM.SetGridController(GM.GetComponentInChildren<GridController>());
         GM.SetIngredientsController(GM.GetComponent<IngredientsController>());
+        GM.SetGameController(GM.GetComponent<GameController>());
+        DOTween.Init();
 
         /// Setup of the components
+        GM.GetPoolManager().Setup();
         GM.GetGridController().Setup();
         GM.GetIngredientsController().Setup();
 

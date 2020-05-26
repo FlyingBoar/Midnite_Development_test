@@ -36,8 +36,8 @@ public class InputController : MonoBehaviour
 
     void LateUpdate()
     {
-        //if (!GameManager.I.IsGameplay())
-        //    return;
+        if (!GameManager.I.IsGameplay())
+            return;
 
         if (isDevice)
             DetectTouchInput();

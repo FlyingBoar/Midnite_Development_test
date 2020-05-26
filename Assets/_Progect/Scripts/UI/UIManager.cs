@@ -9,18 +9,32 @@ public class UIManager : MonoBehaviour
 
     public MenuType CurrentMenu { get; private set; }
 
+    public void Setup()
+    {
+        gameplayPanel.Setup();
+        menuPanel.Setup();
+    }
+
     public void SetCurrentMenu(MenuType _type)
     {
         switch (_type)
         {
             case MenuType.Menu:
-
+                menuPanel.SetStatus(true);
+                gameplayPanel.SetStatus(false);
                 break;
             case MenuType.Gameplay:
+                menuPanel.SetStatus(false);
+                gameplayPanel.SetStatus(true);
                 break;
             default:
                 break;
         }
+    }
+
+    public void StartGame()
+    {
+        GameManager.I.GoToNext();
     }
 
     public enum MenuType

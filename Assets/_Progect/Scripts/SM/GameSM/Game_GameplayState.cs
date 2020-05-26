@@ -11,5 +11,6 @@ public class Game_GameplayState : StateMachineBehaviour
         if (GM == null)
             GM = GameManager.I;
 
+        GM.GetUIManager().SetCurrentMenu(UIManager.MenuType.Gameplay);
     }
 }

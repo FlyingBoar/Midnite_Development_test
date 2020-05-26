@@ -18,12 +18,14 @@ public class Game_SetupState : StateMachineBehaviour
         GM.SetGridController(GM.GetComponentInChildren<GridController>());
         GM.SetIngredientsController(GM.GetComponent<IngredientsController>());
         GM.SetGameController(GM.GetComponent<GameController>());
+        GM.SetUIManager(FindObjectOfType<UIManager>());
         DOTween.Init();
 
         /// Setup of the components
         GM.GetPoolManager().Setup();
         GM.GetGridController().Setup();
         GM.GetIngredientsController().Setup();
+        GM.GetUIManager().Setup();
 
         /// Move to next state of the State machine
         GM.GoToNext();

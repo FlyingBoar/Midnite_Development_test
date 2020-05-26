@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour
     /// Reference to Pool manager
     /// </summary>
     private GameController gameCtrl;
+    /// <summary>
+    /// Reference to UI manager
+    /// </summary>
+    private UIManager UIMng;
 
     /// <summary>
     /// Reference to the game state machine
@@ -83,6 +87,15 @@ public class GameManager : MonoBehaviour
     {
         return I.gameCtrl;
     }
+    
+    /// <summary>
+    /// Get reference for the UI manager
+    /// </summary>
+    /// <returns></returns>
+    public UIManager GetUIManager()
+    {
+        return I.UIMng;
+    }
 
     /// <summary>
     /// Ritorna se la state machine è in gameplay
@@ -129,6 +142,15 @@ public class GameManager : MonoBehaviour
     public void SetGameController(GameController _gameController)
     {
         I.gameCtrl = _gameController;
+    }
+
+    /// <summary>
+    /// Set the reference for the UI manager
+    /// </summary>
+    /// <param name="_uiManager"></param>
+    public void SetUIManager(UIManager _uiManager)
+    {
+        I.UIMng = _uiManager;
     }
 
     #endregion

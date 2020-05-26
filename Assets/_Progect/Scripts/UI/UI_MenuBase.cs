@@ -6,10 +6,20 @@ using DG.Tweening;
 
 public class UI_MenuBase : MonoBehaviour
 {
-    [SerializeField] CanvasGroup group;
-    
+    Animator anim;
+    string fadeIn = "FadeIn";
+    string fadeOut = "FadeOut";
+
+    public void Setup()
+    {
+        anim = GetComponent<Animator>();    
+    }
+
     public void SetStatus(bool _status)
     {
+        anim.ResetTrigger(fadeIn);
+        anim.ResetTrigger(fadeOut);
 
+        anim.SetTrigger(_status ? fadeIn : fadeOut);
     }
 }

@@ -12,8 +12,11 @@ public class UI_MenuBase : MonoBehaviour
 
     public void Setup()
     {
-        anim = GetComponent<Animator>();    
+        anim = GetComponent<Animator>();
+        OnSetup();
     }
+
+    public virtual void OnSetup() { }
 
     public void SetStatus(bool _status)
     {

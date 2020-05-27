@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ public class UIManager : MonoBehaviour
         menuPanel.Setup();
     }
 
+    /// <summary>
+    /// Set the current active menu
+    /// </summary>
+    /// <param name="_type"></param>
     public void SetCurrentMenu(MenuType _type)
     {
         switch (_type)
@@ -32,6 +37,25 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Action when the game is won
+    /// </summary>
+    internal void GameWon()
+    {
+        gameplayPanel.FadeText(true);
+    }
+
+    /// <summary>
+    /// Fade out the gamewon text
+    /// </summary>
+    internal void ResetGameplayUI()
+    {
+        gameplayPanel.FadeText(false);
+    }
+
+    /// <summary>
+    /// Called by the button to go in gameplay state
+    /// </summary>
     public void StartGame()
     {
         GameManager.I.GoToNext();

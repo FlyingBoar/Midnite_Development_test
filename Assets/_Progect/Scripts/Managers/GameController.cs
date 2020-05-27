@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
         if (CheckGridCells())
         {
             // Game Won;
+            GameManager.I.GetUIManager().GameWon();
             Debug.Log("Game Won!");
         }
         else
@@ -94,6 +95,7 @@ public class GameController : MonoBehaviour
     {
         GameManager.I.GetGridController().ClearCellsChilds();
         GameManager.I.GetInputController().Unsetup();
+        GameManager.I.GetUIManager().ResetGameplayUI();
     }
 
     /////////////////////////////////////////////

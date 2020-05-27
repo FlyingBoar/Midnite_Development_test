@@ -9,7 +9,6 @@ public class PoolManagerCustomEditor : Editor
 {
     int ListSize;
     PoolManager _target;
-    //Dictionary<PoolStruct, bool> DetailShowed = new Dictionary<PoolStruct, bool>();
 
     public override void OnInspectorGUI()
     {
@@ -32,11 +31,9 @@ public class PoolManagerCustomEditor : Editor
             EditorGUILayout.BeginHorizontal();
 
 
-            //DetailShowed.TryGetValue(_currentItem, out itemShowDetails);
             GUILayout.Label("", GUILayout.Width(20f));
             _currentItem.inspectorExplandeToggle = EditorGUILayout.Foldout(_currentItem.inspectorExplandeToggle, _currentItem.ID, _currentItem.inspectorExplandeToggle);
 
-            //DetailShowed[_currentItem] = itemShowDetails;
 
             if (GUILayout.Button("Remove", GUILayout.Width(100f)))
             {
@@ -108,6 +105,7 @@ public class PoolManagerCustomEditor : Editor
 
         EditorGUILayout.EndHorizontal();
     }
+
     private void DrawObjectRetrieveStateField(PoolStruct _currentItem)
     {
         EditorGUILayout.BeginHorizontal();

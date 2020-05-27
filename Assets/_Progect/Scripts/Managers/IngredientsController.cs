@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,16 +9,20 @@ public class IngredientsController : MonoBehaviour
     List<Ingredient> ingredientsInLevel;
 
     List<IngredientDisposition> levelDisposition;
-    
+
     List<Ingredient.IngredientType> choosedIngredientsForLevel;
 
     public void Setup()
     {
+        choosedIngredientsForLevel = new List<Ingredient.IngredientType>();
         CreateRandomLevel();
     }
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Create a random level
+    /// </summary>
     public void CreateRandomLevel()
     {
         RetrieveAllIngredients();
@@ -28,25 +31,25 @@ public class IngredientsController : MonoBehaviour
         List<Cell> freeCells = new List<Cell>();
 
         /// Take the index for the bread
-        int breadIndex_A = UnityEngine.Random.Range(1, ingredientsForLevel);
-        int breadIndex_B;
-        breadIndex_B = breadIndex_A - 1;
+        choosedIngredientsForLevel.Clear();
 
-        choosedIngredientsForLevel = new List<Ingredient.IngredientType>();
+        Cell firstBreadCell = GameManager.I.GetGridController().GetRandomCell();
 
-        /// take the cells where place the ingredients
-        AddElemetToList(GameManager.I.GetGridController().GetRandomCell(), (breadIndex_A == 0 || breadIndex_B == 0) ? Ingredient.IngredientType.Bread : GetRandomType());
+        /// Place the bread in position
+        AddElemetToList(firstBreadCell, Ingredient.IngredientType.Bread);
+        AddElemetToList(firstBreadCell.GetNeighbours()[Random.Range(0, firstBreadCell.GetNeighbours().Count)], Ingredient.IngredientType.Bread);
+
+        /// Place the other ingredients random next to each others
         for (int i = 0; i < ingredientsForLevel; i++)
         {
             int currentIndex = i;
-
             Cell neighbourCell = null;
             do
             {
-                neighbourCell = GameManager.I.GetGridController().GetFreeCellFromNeighbours(freeCells[currentIndex]);
+                neighbourCell = GameManager.I.GetGridController().GetFreeCellFromNeighbours(freeCells[Random.Range(0, freeCells.Count)]);
                 if (neighbourCell != null)
                 {
-                    AddElemetToList(neighbourCell, (breadIndex_A == i || breadIndex_B == i) && i != 0 ? Ingredient.IngredientType.Bread : GetRandomType());
+                    AddElemetToList(neighbourCell, GetRandomType());
                     break;
                 }
                 else
@@ -65,9 +68,13 @@ public class IngredientsController : MonoBehaviour
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Repositionate the ingredients with the orger given by the Ingredient disposition parameter
+    /// </summary>
+    /// <param name="_ingredientsDisposition">The list of type of ingredients and position in grid</param>
     internal void LoadLevel(List<IngredientDisposition> _ingredientsDisposition)
     {
-        if(_ingredientsDisposition != null && _ingredientsDisposition.Count > 0)
+        if (_ingredientsDisposition != null && _ingredientsDisposition.Count > 0)
         {
             levelDisposition = _ingredientsDisposition;
             RepositionateIngredients(_ingredientsDisposition);
@@ -76,6 +83,9 @@ public class IngredientsController : MonoBehaviour
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Repositionate the ingredients with the start positions of the current level
+    /// </summary>
     public void RebuildLevel()
     {
         RepositionateIngredients(levelDisposition);
@@ -83,6 +93,10 @@ public class IngredientsController : MonoBehaviour
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Return the list of ingredients position
+    /// </summary>
+    /// <returns></returns>
     public List<IngredientDisposition> GetIngredientsDisposition()
     {
         return levelDisposition;
@@ -90,6 +104,11 @@ public class IngredientsController : MonoBehaviour
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Instantiate the ingredient on the given cell with the given type
+    /// </summary>
+    /// <param name="_cell">Where place the ingredient</param>
+    /// <param name="_type">The type of ingredient</param>
     void InstantiateIngredient(Cell _cell, Ingredient.IngredientType _type)
     {
         Ingredient instantiatedIngredient = GameManager.I.GetPoolManager().GetFirstAvaiableObject<Ingredient>(_cell.transform, _cell.GetWorldPosition());
@@ -100,6 +119,10 @@ public class IngredientsController : MonoBehaviour
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Retrieve all the ingredients to the pool manager and positionate them again with the datas of the ingredient disposition
+    /// </summary>
+    /// <param name="_disposition">Data of ingredient disposition</param>
     private void RepositionateIngredients(List<IngredientDisposition> _disposition)
     {
         RetrieveAllIngredients();
@@ -110,6 +133,9 @@ public class IngredientsController : MonoBehaviour
 
     ////////////////////////////////////////////////////
 
+    /// <summary>
+    /// Give each ingredient to the Pool manager and reset the rotation
+    /// </summary>
     void RetrieveAllIngredients()
     {
         if (ingredientsInLevel != null && ingredientsInLevel.Count > 0)
@@ -122,11 +148,15 @@ public class IngredientsController : MonoBehaviour
     }
 
     ////////////////////////////////////////////////////
-    
+
+    /// <summary>
+    /// Check if there are at least 2 different ingredient in level than choose random
+    /// </summary>
+    /// <returns></returns>
     Ingredient.IngredientType GetRandomType()
     {
         Ingredient.IngredientType selectedType;
-        if(choosedIngredientsForLevel.Count < 2)
+        if (choosedIngredientsForLevel.Count < 2)
         {
             do
             {

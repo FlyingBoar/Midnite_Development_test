@@ -40,12 +40,12 @@ public class GameControllerEditor : Editor
         if (_target.RandomizeIngredientQuantity)
         {
             EditorGUILayout.LabelField("Max quantity to take");
-            maxQuantity.intValue = EditorGUILayout.IntSlider(maxQuantity.intValue, 5, 8);
+            maxQuantity.intValue = EditorGUILayout.IntSlider(maxQuantity.intValue, 5, 9);
         }
         else
         {
             EditorGUILayout.LabelField("Fixed quantity of ingredients");
-            fixedQuantity.intValue = EditorGUILayout.IntSlider(fixedQuantity.intValue, 4, 8);
+            fixedQuantity.intValue = EditorGUILayout.IntSlider(fixedQuantity.intValue, 4, 9);
         }
         EditorGUILayout.EndHorizontal();
 

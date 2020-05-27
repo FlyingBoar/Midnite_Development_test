@@ -70,7 +70,12 @@ public class GameController : MonoBehaviour
         GameManager.I.GetIngredientsController().LoadLevel(SaveManager.LoadLastSavedData());
     }
 
+    /////////////////////////////////////////////
 
+    /// <summary>
+    /// Return the quantity of ingredient for the level
+    /// </summary>
+    /// <returns></returns>
     public int GetIngredientAmount()
     {
         int value = FixedIngredientQuantity + 1;

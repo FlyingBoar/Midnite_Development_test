@@ -45,4 +45,16 @@ public class GameController : MonoBehaviour
 
         return value;
     }
+
+    public void RebuildSameLevel()
+    {
+        GameManager.I.GetGridController().ClearCellsChilds();
+        GameManager.I.GetIngredientsController().RebuildLevel();
+    }
+
+    public void CreateNewLevel()
+    {
+        GameManager.I.GetGridController().ClearCellsChilds();
+        GameManager.I.GetIngredientsController().CreateRandomLevel();
+    }
 }

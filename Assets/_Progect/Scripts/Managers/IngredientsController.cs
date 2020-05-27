@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class IngredientsController : MonoBehaviour
 {
-    [SerializeField] int breadQuantity;
-    [SerializeField] Ingredient tempObj;
     [SerializeField] int ingredientsForLevel = 4;
+
+    List<Ingredient> ingredientsInLevel;
+    List<IngredientDisposition> levelDisposition;
+    List<Ingredient.IngredientType> choosedIngredientsForLevel;
 
     public void Setup()
     {
-        // TODO: Temporaneo, da spostare
-        Init(); 
+        CreateRandomLevel();
     }
 
     ////////////////////////////////////////////////////
 
-    public void Init()
+    public void CreateRandomLevel()
     {
+        RetrieveAllIngredients();
+        ingredientsInLevel = new List<Ingredient>();
+        levelDisposition = new List<IngredientDisposition>();
         ingredientsForLevel = Random.Range(4, 7);
         List<Cell> freeCells = new List<Cell>();
 
@@ -26,12 +30,14 @@ public class IngredientsController : MonoBehaviour
         int breadIndex_B;
         breadIndex_B = breadIndex_A - 1 > 0 ? breadIndex_A - 1 : breadIndex_A + 1;
 
+        choosedIngredientsForLevel = new List<Ingredient.IngredientType>();
+
         /// take the cells where place the ingredients
         AddElemetToList(GameManager.I.GetGridController().GetRandomCell(), (breadIndex_A == 0 || breadIndex_B == 0) ? Ingredient.IngredientType.Bread : GetRandomType());
         for (int i = 0; i < ingredientsForLevel; i++)
         {
             int currentIndex = i;
-            
+
             Cell neighbourCell = null;
             do
             {
@@ -46,33 +52,74 @@ public class IngredientsController : MonoBehaviour
             } while (neighbourCell == null);
         }
 
-        
-
-        /// Instantiate the ingredient child of the cell
-        //for (int i = 0; i < freeCells.Count; i++)
-        //{
-        //    Ingredient.IngredientType type = Ingredient.IngredientType.Bread;
-        //    if (i != breadIndex_A && i != breadIndex_B)
-        //        type = GetRandomType();
-
-        //    Ingredient instantiatedIngredient = Instantiate(tempObj, freeCells[i].GetWorldPosition(), Quaternion.identity, freeCells[i].GetGraphicContainer());
-        //    instantiatedIngredient.Setup(type);
-        //    freeCells[i].AddIngredient(instantiatedIngredient);
-        //}
-
-        void AddElemetToList(Cell _cellToAdd, Ingredient.IngredientType _type )
+        ///Function to instantiate the ingredient on the given cell
+        void AddElemetToList(Cell _cellToAdd, Ingredient.IngredientType _type)
         {
             freeCells.Add(_cellToAdd);
-            Ingredient instantiatedIngredient = Instantiate(tempObj, _cellToAdd.GetWorldPosition(), Quaternion.identity, _cellToAdd.GetGraphicContainer());
-            instantiatedIngredient.Setup(_type);
-            _cellToAdd.AddIngredient(instantiatedIngredient);
+            InstantiateIngredient(_cellToAdd, _type);
+            levelDisposition.Add(new IngredientDisposition(_type, _cellToAdd));
         }
+    }
+
+    ////////////////////////////////////////////////////
+
+    public void RebuildLevel()
+    {
+        RetrieveAllIngredients();
+
+        foreach (IngredientDisposition disposition in levelDisposition)
+            InstantiateIngredient(disposition.CellReference, disposition.Type);
+    }
+
+    void InstantiateIngredient(Cell _cell, Ingredient.IngredientType _type)
+    {
+        Ingredient instantiatedIngredient = GameManager.I.GetPoolManager().GetFirstAvaiableObject<Ingredient>(_cell.transform, _cell.GetWorldPosition());
+        instantiatedIngredient.Setup(_type);
+        ingredientsInLevel.Add(instantiatedIngredient);
+        _cell.AddIngredient(instantiatedIngredient);
+    }
+
+    ////////////////////////////////////////////////////
+
+    void RetrieveAllIngredients()
+    {
+        if (ingredientsInLevel != null && ingredientsInLevel.Count > 0)
+            for (int i = 0; i < ingredientsInLevel.Count; i++)
+            {
+                Quaternion resetPosition = Quaternion.Euler(Vector3.zero);
+                ingredientsInLevel[i].transform.rotation = resetPosition;
+                GameManager.I.GetPoolManager().RetrievePoollable(ingredientsInLevel[i]);
+            }
     }
 
     ////////////////////////////////////////////////////
 
     Ingredient.IngredientType GetRandomType()
     {
-        return (Ingredient.IngredientType)Random.Range(1, 9);
+        Ingredient.IngredientType selectedType;
+        if(choosedIngredientsForLevel.Count < 2)
+        {
+            do
+            {
+                selectedType = (Ingredient.IngredientType)Random.Range(1, 9);
+            } while (choosedIngredientsForLevel.Contains(selectedType));
+        }
+        else
+            selectedType = (Ingredient.IngredientType)Random.Range(1, 9);
+
+        choosedIngredientsForLevel.Add(selectedType);
+        return selectedType;
+    }
+
+    struct IngredientDisposition
+    {
+        public Ingredient.IngredientType Type;
+        public Cell CellReference;
+
+        public IngredientDisposition(Ingredient.IngredientType _type, Cell _cell)
+        {
+            Type = _type;
+            CellReference = _cell;
+        }
     }
 }

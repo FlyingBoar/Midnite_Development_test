@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ingredient : MonoBehaviour
+public class Ingredient : PoolObjectBase
 {
 
     public IngredientType MyType
@@ -24,6 +24,11 @@ public class Ingredient : MonoBehaviour
         MyType = _ingredientType;
     }
 
+    public override void OnRetrieve()
+    {
+        if (graphic != null)
+            GameManager.I.GetPoolManager().RetrievePoollable(graphic.ID, graphic);
+    }
 
     public enum IngredientType
     {

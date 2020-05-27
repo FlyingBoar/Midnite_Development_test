@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GridController : MonoBehaviour
@@ -63,6 +61,15 @@ public class GridController : MonoBehaviour
             });
         }
     }
+    
+    /////////////////////////////////////////////
+
+    internal void ClearCellsChilds()
+    {
+        for (int j = 0; j < cells.GetLength(0); j++)
+            for (int k = 0; k < cells.GetLength(1); k++)
+                cells[j, k].ClearIngredients();
+    }
 
     /////////////////////////////////////////////
 
@@ -72,7 +79,7 @@ public class GridController : MonoBehaviour
     /// <returns></returns>
     public Cell GetRandomCell()
     {
-        return cells[Random.Range(0, gridDimension_x - 1), Random.Range(0, gridDimension_y - 1)];
+        return cells[UnityEngine.Random.Range(0, gridDimension_x - 1), UnityEngine.Random.Range(0, gridDimension_y - 1)];
     }
 
     /////////////////////////////////////////////

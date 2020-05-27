@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class IngredientsController : MonoBehaviour
 {
-    [SerializeField] int ingredientsForLevel = 4;
 
+    int ingredientsForLevel => GameManager.I.GetGameController().GetIngredientAmount();
     List<Ingredient> ingredientsInLevel;
 
-    [SerializeField] List<IngredientDisposition> levelDisposition;
+    List<IngredientDisposition> levelDisposition;
     
     List<Ingredient.IngredientType> choosedIngredientsForLevel;
 
@@ -25,13 +25,12 @@ public class IngredientsController : MonoBehaviour
         RetrieveAllIngredients();
         ingredientsInLevel = new List<Ingredient>();
         levelDisposition = new List<IngredientDisposition>();
-        ingredientsForLevel = UnityEngine.Random.Range(4, 7);
         List<Cell> freeCells = new List<Cell>();
 
         /// Take the index for the bread
         int breadIndex_A = UnityEngine.Random.Range(1, ingredientsForLevel);
         int breadIndex_B;
-        breadIndex_B = breadIndex_A - 1 > 0 ? breadIndex_A - 1 : breadIndex_A + 1;
+        breadIndex_B = breadIndex_A - 1;
 
         choosedIngredientsForLevel = new List<Ingredient.IngredientType>();
 

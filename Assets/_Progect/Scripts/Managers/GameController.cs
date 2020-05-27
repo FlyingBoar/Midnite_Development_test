@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField]
+    public bool RandomizeIngredientQuantity;
+    [SerializeField]
+    public int MaxIngredientQuantity = 5;
+    [SerializeField]
+    public int FixedIngredientQuantity = 4;
+
+    /// <summary>
+    /// Check victory conditions
+    /// </summary>
     public void CheckVictory()
     {
         if (CheckGridCells())
@@ -19,7 +29,75 @@ public class GameController : MonoBehaviour
 
     /////////////////////////////////////////////
 
-    public bool CheckGridCells()
+    /// <summary>
+    /// Create again the current level
+    /// </summary>
+    public void RebuildSameLevel()
+    {
+        UnsetupComponents();
+        GameManager.I.GetIngredientsController().RebuildLevel();
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Generate a new random level
+    /// </summary>
+    public void CreateNewLevel()
+    {
+        UnsetupComponents();
+        GameManager.I.GetIngredientsController().CreateRandomLevel();
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Call the function to save the current level
+    /// </summary>
+    public void SaveLevel()
+    {
+        SaveManager.Save(GameManager.I.GetIngredientsController().GetIngredientsDisposition());
+    }
+    
+    /////////////////////////////////////////////
+    
+    /// <summary>
+    /// Call the function to load the last level saved
+    /// </summary>
+    public void LoadLastSave()
+    {
+        UnsetupComponents();
+        GameManager.I.GetIngredientsController().LoadLevel(SaveManager.LoadLastSavedData());
+    }
+
+
+    public int GetIngredientAmount()
+    {
+        int value = FixedIngredientQuantity + 1;
+        if (RandomizeIngredientQuantity)
+            value = Random.Range(4, MaxIngredientQuantity + 1);
+
+        return value;
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Clear the ingredients for all the cells in grid and clear the input controller if there was an ingredient moving
+    /// </summary>
+    void UnsetupComponents()
+    {
+        GameManager.I.GetGridController().ClearCellsChilds();
+        GameManager.I.GetInputController().Unsetup();
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Check if there is more than one cell with ingredients, if there is only one cell with ingredients check if the bread is on top and bottom
+    /// </summary>
+    /// <returns></returns>
+    bool CheckGridCells()
     {
         bool value = false;
         var cells = GameManager.I.GetGridController().GetCells();
@@ -45,44 +123,5 @@ public class GameController : MonoBehaviour
                 value = true;
 
         return value;
-    }
-
-    /////////////////////////////////////////////
-
-    public void RebuildSameLevel()
-    {
-        UnsetupComponents();
-        GameManager.I.GetIngredientsController().RebuildLevel();
-    }
-
-    /////////////////////////////////////////////
-
-    public void CreateNewLevel()
-    {
-        UnsetupComponents();
-        GameManager.I.GetIngredientsController().CreateRandomLevel();
-    }
-
-    /////////////////////////////////////////////
-
-    public void SaveLevel()
-    {
-        SaveManager.Save(GameManager.I.GetIngredientsController().GetIngredientsDisposition());
-    }
-    
-    /////////////////////////////////////////////
-    
-    public void LoadLastSave()
-    {
-        UnsetupComponents();
-        GameManager.I.GetIngredientsController().LoadLevel(SaveManager.LoadLastSavedData());
-    }
-
-    /////////////////////////////////////////////
-
-    void UnsetupComponents()
-    {
-        GameManager.I.GetGridController().ClearCellsChilds();
-        GameManager.I.GetInputController().Unsetup();
     }
 }

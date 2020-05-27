@@ -26,12 +26,12 @@ public class InputController : MonoBehaviour
 
     public void Unsetup()
     {
-
+        CellInMotion = false;
     }
 
     public void Init()
     {
-
+        
     }
 
     void LateUpdate()
@@ -140,16 +140,14 @@ public class InputController : MonoBehaviour
 
         if (CheckSwipeDistance(_inputPosition))
         {
-
             if (IsVerticalSwipe(_inputPosition))
             {
-                GameManager.I.GetGridController().Swipe(selectedCell, _inputPosition.y - startPosition.y > 0 ? SwipeDirection.Up : SwipeDirection.Down);
+                CellInMotion = GameManager.I.GetGridController().Swipe(selectedCell, _inputPosition.y - startPosition.y > 0 ? SwipeDirection.Up : SwipeDirection.Down);
             }
             else
             {
-                GameManager.I.GetGridController().Swipe(selectedCell, _inputPosition.x - startPosition.x > 0 ? SwipeDirection.Right : SwipeDirection.Left);
+                CellInMotion = GameManager.I.GetGridController().Swipe(selectedCell, _inputPosition.x - startPosition.x > 0 ? SwipeDirection.Right : SwipeDirection.Left);
             }
-            CellInMotion = true;
             dragCompleted = true;
         }
     }

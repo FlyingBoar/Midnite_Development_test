@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
         }
     }
 
+    /////////////////////////////////////////////
 
     public bool CheckGridCells()
     {
@@ -46,15 +47,42 @@ public class GameController : MonoBehaviour
         return value;
     }
 
+    /////////////////////////////////////////////
+
     public void RebuildSameLevel()
     {
-        GameManager.I.GetGridController().ClearCellsChilds();
+        UnsetupComponents();
         GameManager.I.GetIngredientsController().RebuildLevel();
     }
 
+    /////////////////////////////////////////////
+
     public void CreateNewLevel()
     {
-        GameManager.I.GetGridController().ClearCellsChilds();
+        UnsetupComponents();
         GameManager.I.GetIngredientsController().CreateRandomLevel();
+    }
+
+    /////////////////////////////////////////////
+
+    public void SaveLevel()
+    {
+        SaveManager.Save(GameManager.I.GetIngredientsController().GetIngredientsDisposition());
+    }
+    
+    /////////////////////////////////////////////
+    
+    public void LoadLastSave()
+    {
+        UnsetupComponents();
+        GameManager.I.GetIngredientsController().LoadLevel(SaveManager.LoadLastSavedData());
+    }
+
+    /////////////////////////////////////////////
+
+    void UnsetupComponents()
+    {
+        GameManager.I.GetGridController().ClearCellsChilds();
+        GameManager.I.GetInputController().Unsetup();
     }
 }

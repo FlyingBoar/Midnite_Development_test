@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,9 @@ public class IngredientsController : MonoBehaviour
     [SerializeField] int ingredientsForLevel = 4;
 
     List<Ingredient> ingredientsInLevel;
-    List<IngredientDisposition> levelDisposition;
+
+    [SerializeField] List<IngredientDisposition> levelDisposition;
+    
     List<Ingredient.IngredientType> choosedIngredientsForLevel;
 
     public void Setup()
@@ -22,11 +25,11 @@ public class IngredientsController : MonoBehaviour
         RetrieveAllIngredients();
         ingredientsInLevel = new List<Ingredient>();
         levelDisposition = new List<IngredientDisposition>();
-        ingredientsForLevel = Random.Range(4, 7);
+        ingredientsForLevel = UnityEngine.Random.Range(4, 7);
         List<Cell> freeCells = new List<Cell>();
 
         /// Take the index for the bread
-        int breadIndex_A = Random.Range(1, ingredientsForLevel);
+        int breadIndex_A = UnityEngine.Random.Range(1, ingredientsForLevel);
         int breadIndex_B;
         breadIndex_B = breadIndex_A - 1 > 0 ? breadIndex_A - 1 : breadIndex_A + 1;
 
@@ -57,7 +60,18 @@ public class IngredientsController : MonoBehaviour
         {
             freeCells.Add(_cellToAdd);
             InstantiateIngredient(_cellToAdd, _type);
-            levelDisposition.Add(new IngredientDisposition(_type, _cellToAdd));
+            levelDisposition.Add(new IngredientDisposition(_type, _cellToAdd.GetGridPosition()));
+        }
+    }
+
+    ////////////////////////////////////////////////////
+
+    internal void LoadLevel(List<IngredientDisposition> _ingredientsDisposition)
+    {
+        if(_ingredientsDisposition != null && _ingredientsDisposition.Count > 0)
+        {
+            levelDisposition = _ingredientsDisposition;
+            RepositionateIngredients(_ingredientsDisposition);
         }
     }
 
@@ -65,11 +79,17 @@ public class IngredientsController : MonoBehaviour
 
     public void RebuildLevel()
     {
-        RetrieveAllIngredients();
-
-        foreach (IngredientDisposition disposition in levelDisposition)
-            InstantiateIngredient(disposition.CellReference, disposition.Type);
+        RepositionateIngredients(levelDisposition);
     }
+
+    ////////////////////////////////////////////////////
+
+    public List<IngredientDisposition> GetIngredientsDisposition()
+    {
+        return levelDisposition;
+    }
+
+    ////////////////////////////////////////////////////
 
     void InstantiateIngredient(Cell _cell, Ingredient.IngredientType _type)
     {
@@ -77,6 +97,16 @@ public class IngredientsController : MonoBehaviour
         instantiatedIngredient.Setup(_type);
         ingredientsInLevel.Add(instantiatedIngredient);
         _cell.AddIngredient(instantiatedIngredient);
+    }
+
+    ////////////////////////////////////////////////////
+
+    private void RepositionateIngredients(List<IngredientDisposition> _disposition)
+    {
+        RetrieveAllIngredients();
+
+        foreach (IngredientDisposition disposition in _disposition)
+            InstantiateIngredient(GameManager.I.GetGridController().GetCellFromPosition(disposition.CellIndex), disposition.Type);
     }
 
     ////////////////////////////////////////////////////
@@ -93,7 +123,7 @@ public class IngredientsController : MonoBehaviour
     }
 
     ////////////////////////////////////////////////////
-
+    
     Ingredient.IngredientType GetRandomType()
     {
         Ingredient.IngredientType selectedType;
@@ -101,25 +131,26 @@ public class IngredientsController : MonoBehaviour
         {
             do
             {
-                selectedType = (Ingredient.IngredientType)Random.Range(1, 9);
+                selectedType = (Ingredient.IngredientType)UnityEngine.Random.Range(1, 9);
             } while (choosedIngredientsForLevel.Contains(selectedType));
         }
         else
-            selectedType = (Ingredient.IngredientType)Random.Range(1, 9);
+            selectedType = (Ingredient.IngredientType)UnityEngine.Random.Range(1, 9);
 
         choosedIngredientsForLevel.Add(selectedType);
         return selectedType;
     }
 
-    struct IngredientDisposition
+    [System.Serializable]
+    public struct IngredientDisposition
     {
         public Ingredient.IngredientType Type;
-        public Cell CellReference;
+        public Vector2Int CellIndex;
 
-        public IngredientDisposition(Ingredient.IngredientType _type, Cell _cell)
+        public IngredientDisposition(Ingredient.IngredientType _type, Vector2Int _cellIndex)
         {
             Type = _type;
-            CellReference = _cell;
+            CellIndex = _cellIndex;
         }
     }
 }

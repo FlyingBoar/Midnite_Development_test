@@ -14,6 +14,7 @@ public class Game_SetupState : StateMachineBehaviour
 
 
         /// Get references to components
+        GM.SetInputController(GM.GetComponent<InputController>());
         GM.SetPoolManager(GM.GetComponentInChildren<PoolManager>());
         GM.SetGridController(GM.GetComponentInChildren<GridController>());
         GM.SetIngredientsController(GM.GetComponent<IngredientsController>());
@@ -22,6 +23,7 @@ public class Game_SetupState : StateMachineBehaviour
         DOTween.Init();
 
         /// Setup of the components
+        GM.GetInputController().Setup();
         GM.GetPoolManager().Setup();
         GM.GetGridController().Setup();
         GM.GetIngredientsController().Setup();

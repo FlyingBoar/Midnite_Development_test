@@ -5,7 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager I;
-    
+
+    /// <summary>
+    /// Reference InputController
+    /// </summary>
+    private InputController inputCtrl;
     /// <summary>
     /// Reference to grid controller
     /// </summary>
@@ -52,6 +56,15 @@ public class GameManager : MonoBehaviour
     }
 
     #region Get
+    /// <summary>
+    /// Return the refenrece for the input controller
+    /// </summary>
+    /// <returns></returns>
+    public InputController GetInputController()
+    {
+        return I.inputCtrl;
+    }
+
     /// <summary>
     /// Return the refenrece for the grid controller
     /// </summary>
@@ -108,6 +121,15 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Set
+    /// <summary>
+    /// Set the reference for the input controller
+    /// </summary>
+    /// <param name="_inputController"></param>
+    public void SetInputController(InputController _inputController)
+    {
+        I.inputCtrl = _inputController;
+    }
+
     /// <summary>
     /// Set the reference for the grid controller
     /// </summary>

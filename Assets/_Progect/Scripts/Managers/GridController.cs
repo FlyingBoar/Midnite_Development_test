@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GridController : MonoBehaviour
@@ -35,33 +36,33 @@ public class GridController : MonoBehaviour
 
     /////////////////////////////////////////////
 
-    public void Swipe(Cell _selectedCell, InputController.SwipeDirection _direction)
+    public bool Swipe(Cell _selectedCell, InputController.SwipeDirection _direction)
     {
         Cell c = GetCellByDirection(_selectedCell, _direction);
-
-        if (_selectedCell == null || c == null)
-            return;
-
-        if (_selectedCell.GetIngredients().Count > 0 && c.GetIngredients().Count > 0)
-        {
-            Vector3 newPos = new Vector3(c.GetWorldPosition().x, c.GetWorldPosition().y + c.GetIngredients().Count * Cell.ingredientOffset, c.GetWorldPosition().z);
-
-            _selectedCell.MoveIngredients(newPos, _direction, () =>
+        bool canSwipe = false;
+        if (_selectedCell != null || c != null)
+            if (_selectedCell.GetIngredients().Count > 0 && c.GetIngredients().Count > 0)
             {
-                if (_selectedCell.GetIngredients().Count > 1)
-                {
-                    for (int i = _selectedCell.GetIngredients().Count - 1; i >= 0; i--)
-                        c.AddIngredient(_selectedCell.GetIngredients()[i]);
-                }
-                else
-                    c.AddIngredient(_selectedCell.GetIngredients()[0]);
+                Vector3 newPos = new Vector3(c.GetWorldPosition().x, c.GetWorldPosition().y + c.GetIngredients().Count * Cell.ingredientOffset, c.GetWorldPosition().z);
+                canSwipe = true;
 
-                _selectedCell.ClearIngredients();
-                GameManager.I.GetGameController().CheckVictory();
-            });
-        }
+                _selectedCell.MoveIngredients(newPos, _direction, () =>
+                {
+                    if (_selectedCell.GetIngredients().Count > 1)
+                    {
+                        for (int i = _selectedCell.GetIngredients().Count - 1; i >= 0; i--)
+                            c.AddIngredient(_selectedCell.GetIngredients()[i]);
+                    }
+                    else
+                        c.AddIngredient(_selectedCell.GetIngredients()[0]);
+
+                    _selectedCell.ClearIngredients();
+                    GameManager.I.GetGameController().CheckVictory();
+                });
+            }
+        return canSwipe;
     }
-    
+
     /////////////////////////////////////////////
 
     internal void ClearCellsChilds()
@@ -87,6 +88,11 @@ public class GridController : MonoBehaviour
     public Cell[,] GetCells()
     {
         return cells;
+    }
+
+    internal Cell GetCellFromPosition(Vector2Int _cellIndex)
+    {
+        return cells[_cellIndex.x, _cellIndex.y];
     }
 
     /////////////////////////////////////////////

@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
         menuPanel.Setup();
     }
 
+    /////////////////////////////////////////////
+
     /// <summary>
     /// Set the current active menu
     /// </summary>
@@ -37,6 +39,48 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Call the function to create a new level
+    /// </summary>
+    public void NewLevel()
+    {
+        GameManager.I.GetGameController().CreateNewLevel();
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Call the function to create the same level
+    /// </summary>
+    public void RepeatLevel()
+    {
+        GameManager.I.GetGameController().RebuildSameLevel();
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Call the function to save the level
+    /// </summary>
+    public void SaveLevel()
+    {
+        GameManager.I.GetGameController().SaveLevel();
+    }
+
+    /////////////////////////////////////////////
+
+    /// <summary>
+    /// Call the function to load last level saved
+    /// </summary>
+    public void LoadLevel()
+    {
+        GameManager.I.GetGameController().LoadLastSave();
+    }
+
+    /////////////////////////////////////////////
+
     /// <summary>
     /// Action when the game is won
     /// </summary>
@@ -44,6 +88,8 @@ public class UIManager : MonoBehaviour
     {
         gameplayPanel.FadeText(true);
     }
+
+    /////////////////////////////////////////////
 
     /// <summary>
     /// Fade out the gamewon text
@@ -53,6 +99,8 @@ public class UIManager : MonoBehaviour
         gameplayPanel.FadeText(false);
     }
 
+    /////////////////////////////////////////////
+
     /// <summary>
     /// Called by the button to go in gameplay state
     /// </summary>
@@ -60,6 +108,8 @@ public class UIManager : MonoBehaviour
     {
         GameManager.I.GoToNext();
     }
+
+    /////////////////////////////////////////////
 
     public enum MenuType
     {

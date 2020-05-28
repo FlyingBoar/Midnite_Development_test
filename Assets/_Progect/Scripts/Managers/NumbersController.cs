@@ -39,12 +39,12 @@ public class NumbersController : MonoBehaviour
         //    } while (neighbourCell == null);
         //}
 
-        AddElemetToList(GetCell(freeCells[0]), 2);
-        AddElemetToList(GetCell(freeCells[1]), 2);
-        AddElemetToList(GetCell(freeCells[2]), 4);
-        AddElemetToList(GetCell(freeCells[3]), 8);
-        AddElemetToList(GetCell(freeCells[4]), 8);
-        AddElemetToList(GetCell(freeCells[5]), 8);
+        InstantiateTile(GetCell(freeCells[0]), 2);
+        InstantiateTile(GetCell(freeCells[1]), 2);
+        InstantiateTile(GetCell(freeCells[2]), 4);
+        InstantiateTile(GetCell(freeCells[3]), 8);
+        InstantiateTile(GetCell(freeCells[4]), 8);
+        InstantiateTile(GetCell(freeCells[5]), 8);
 
         Cell GetCell(Cell _neighbour)
         {
@@ -59,11 +59,10 @@ public class NumbersController : MonoBehaviour
         }
 
         ///Function to instantiate the ingredient on the given cell
-        void AddElemetToList(Cell _cellToAdd, int _number)
+        void InstantiateTile(Cell _cellToAdd, int _number)
         {
             freeCells.Add(_cellToAdd);
             InstantiateNumber(_cellToAdd, _number);
-            //levelDisposition.Add(new IngredientDisposition(_type, _cellToAdd.GetGridPosition()));
         }
     }
 

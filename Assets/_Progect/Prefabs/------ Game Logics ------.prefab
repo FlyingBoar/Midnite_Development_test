@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 875222650270667872}
   - component: {fileID: 875222650270667874}
   - component: {fileID: 875222650270667873}
-  - component: {fileID: 875222650270667875}
   - component: {fileID: 875222650270667876}
   - component: {fileID: 875222650270667877}
   m_Layer: 0
@@ -34,6 +33,7 @@ Transform:
   m_Children:
   - {fileID: 875222650469636325}
   - {fileID: 875222651221460288}
+  - {fileID: 7677870003986974307}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -68,19 +68,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f68cc65e6c373f4fa9f015bf0d6d251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &875222650270667875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875222650270667871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d81f88087586a4ca31fb000cf58cc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ingredientsForLevel: 4
 --- !u!114 &875222650270667876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab79588013d825499baef6a364225cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputDeadZone: 10
+  swipeDeadZone: 10
 --- !u!114 &875222650270667877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,6 +93,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b11ce57c8750c4daafaecd1a67f27f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RandomizeIngredientQuantity: 1
+  MaxIngredientQuantity: 7
+  FixedIngredientQuantity: 9
+  CurrentGameType: 0
 --- !u!1 &875222650469636324
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,3 +248,131 @@ MonoBehaviour:
       type: 3}
     Quantity: 8
     ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: Tile
+    Prefab: {fileID: 8585595676159063950, guid: f47a36c292af5ba4b804b624b21701bd,
+      type: 3}
+    Quantity: 8
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 2
+    Prefab: {fileID: 3249598248418093083, guid: 4046b1d76676736469a5a86ce5394280,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 4
+    Prefab: {fileID: -7331925838199470472, guid: a932e16dbbdcb514aacc41ac27afa885,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 8
+    Prefab: {fileID: -3382752861490955479, guid: 1c2904d2adf022d4592aea52f92990dd,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 16
+    Prefab: {fileID: -7709637363396251746, guid: 7135b4d632286ee41b881e674c19d7dd,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 32
+    Prefab: {fileID: 8908829432955144669, guid: 946f45f52bcf7104689aaaace84e534a,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 64
+    Prefab: {fileID: -2559357892936662983, guid: d083ed74016abad48bb3a65bb0de1f06,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 128
+    Prefab: {fileID: 3003758356806756334, guid: 1de33bdfcda3b964799f826dc644341a,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 256
+    Prefab: {fileID: -7229073233320989296, guid: 7cd83738df8b4d242a25eb36f52bea14,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 512
+    Prefab: {fileID: -1333085104817992665, guid: 1788de2e5431c5b49b150e44f2b68b16,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 1024
+    Prefab: {fileID: -8901212997735135087, guid: 7c6b08cb200492943abea5ef126be6e0,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+  - inspectorExplandeToggle: 0
+    ID: 2048
+    Prefab: {fileID: -2959727579657736650, guid: f247a603f396965458348694ee58fafc,
+      type: 3}
+    Quantity: 3
+    ObjectStateOnRetrieve: 0
+--- !u!1 &2063729269332874244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7677870003986974307}
+  - component: {fileID: 1108821863687861729}
+  - component: {fileID: 3099513343958281463}
+  m_Layer: 0
+  m_Name: TilesController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7677870003986974307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063729269332874244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 875222650270667872}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1108821863687861729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063729269332874244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d81f88087586a4ca31fb000cf58cc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3099513343958281463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063729269332874244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb23e3f5448611542ae105961410d6cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

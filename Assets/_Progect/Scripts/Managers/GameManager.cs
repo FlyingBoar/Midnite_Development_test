@@ -7,17 +7,27 @@ public class GameManager : MonoBehaviour
     public static GameManager I;
 
     /// <summary>
-    /// Reference InputController
+    /// Reference to events container
+    /// </summary>
+    private EventsContainer eventsContainer;
+    /// <summary>
+    /// Reference to InputController
     /// </summary>
     private InputController inputCtrl;
     /// <summary>
     /// Reference to grid controller
     /// </summary>
     private GridController gridCtrl;
+    
     /// <summary>
     /// Reference to the Ingredient controller
     /// </summary>
     private IngredientsController ingredientsCtrl;
+    /// <summary>
+    /// Reference to the Number controller
+    /// </summary>
+    private NumbersController numbersCtrl;
+
     /// <summary>
     /// Reference to Pool manager
     /// </summary>
@@ -56,6 +66,16 @@ public class GameManager : MonoBehaviour
     }
 
     #region Get
+
+    /// <summary>
+    /// Return the refenrece for the Events container
+    /// </summary>
+    /// <returns></returns>
+    public EventsContainer GetEventsContainer()
+    {
+        return I.eventsContainer;
+    }
+
     /// <summary>
     /// Return the refenrece for the input controller
     /// </summary>
@@ -81,6 +101,15 @@ public class GameManager : MonoBehaviour
     public IngredientsController GetIngredientsController()
     {
         return I.ingredientsCtrl;
+    }
+
+    /// <summary>
+    /// Get reference for the numbers controller
+    /// </summary>
+    /// <returns></returns>
+    public NumbersController GetNumbersController()
+    {
+        return I.numbersCtrl;
     }
 
     /// <summary>
@@ -122,6 +151,15 @@ public class GameManager : MonoBehaviour
 
     #region Set
     /// <summary>
+    /// Set the reference for the Input container
+    /// </summary>
+    /// <param name="_eventsContainer"></param>
+    public void SetEventsContainer(EventsContainer _eventsContainer)
+    {
+        I.eventsContainer = _eventsContainer;
+    }
+
+    /// <summary>
     /// Set the reference for the input controller
     /// </summary>
     /// <param name="_inputController"></param>
@@ -146,6 +184,15 @@ public class GameManager : MonoBehaviour
     public void SetIngredientsController(IngredientsController _ingredientsController)
     {
         I.ingredientsCtrl = _ingredientsController;
+    }
+
+    /// <summary>
+    /// Set the reference for the numbers controller
+    /// </summary>
+    /// <param name="NumbersController"></param>
+    public void SetNumbersController(NumbersController _numbersController)
+    {
+        I.numbersCtrl = _numbersController;
     }
 
     /// <summary>

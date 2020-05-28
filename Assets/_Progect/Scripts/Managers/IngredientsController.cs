@@ -2,20 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class responsable to instantiate the ingredients on the grid, retrieve them, and replace on load level
+/// </summary>
 public class IngredientsController : MonoBehaviour
 {
-
     int ingredientsForLevel => GameManager.I.GetGameController().GetIngredientAmount();
-    List<Ingredient> ingredientsInLevel;
+    List<Ingredient> ingredientsInLevel = new List<Ingredient>();
 
-    List<IngredientDisposition> levelDisposition;
+    List<IngredientDisposition> levelDisposition = new List<IngredientDisposition>();
 
     List<Ingredient.IngredientType> choosedIngredientsForLevel;
 
     public void Setup()
     {
+        GameManager.I.GetEventsContainer().OnCreateNewLevelEvent += CreateRandomLevel;
+        GameManager.I.GetEventsContainer().OnRebuildSameLevelEvent += RebuildLevel;
+        GameManager.I.GetEventsContainer().OnLoadLevelEvent += LoadLevel;
+        GameManager.I.GetEventsContainer().OnSaveLevelEvent+= GetIngredientsDisposition;
+
+
         choosedIngredientsForLevel = new List<Ingredient.IngredientType>();
         CreateRandomLevel();
+    }
+
+    public void Unsetup()
+    {
+        GameManager.I.GetEventsContainer().OnCreateNewLevelEvent -= CreateRandomLevel;
+        GameManager.I.GetEventsContainer().OnRebuildSameLevelEvent -= RebuildLevel;
+        GameManager.I.GetEventsContainer().OnLoadLevelEvent -= LoadLevel;
+        GameManager.I.GetEventsContainer().OnSaveLevelEvent -= GetIngredientsDisposition;
     }
 
     ////////////////////////////////////////////////////
@@ -26,8 +42,8 @@ public class IngredientsController : MonoBehaviour
     public void CreateRandomLevel()
     {
         RetrieveAllIngredients();
-        ingredientsInLevel = new List<Ingredient>();
-        levelDisposition = new List<IngredientDisposition>();
+        ingredientsInLevel.Clear();
+        levelDisposition.Clear();
         List<Cell> freeCells = new List<Cell>();
 
         /// Take the index for the bread
@@ -42,7 +58,6 @@ public class IngredientsController : MonoBehaviour
         /// Place the other ingredients random next to each others
         for (int i = 0; i < ingredientsForLevel; i++)
         {
-            int currentIndex = i;
             Cell neighbourCell = null;
             do
             {
@@ -52,8 +67,7 @@ public class IngredientsController : MonoBehaviour
                     AddElemetToList(neighbourCell, GetRandomType());
                     break;
                 }
-                else
-                    currentIndex--;
+
             } while (neighbourCell == null);
         }
 
@@ -112,9 +126,9 @@ public class IngredientsController : MonoBehaviour
     void InstantiateIngredient(Cell _cell, Ingredient.IngredientType _type)
     {
         Ingredient instantiatedIngredient = GameManager.I.GetPoolManager().GetFirstAvaiableObject<Ingredient>(_cell.transform, _cell.GetWorldPosition());
-        instantiatedIngredient.Setup(_type);
+        instantiatedIngredient.TileSetup(_type);
         ingredientsInLevel.Add(instantiatedIngredient);
-        _cell.AddIngredient(instantiatedIngredient);
+        _cell.AddChild(instantiatedIngredient);
     }
 
     ////////////////////////////////////////////////////

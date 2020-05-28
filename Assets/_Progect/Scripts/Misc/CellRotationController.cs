@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class IngredientRotationController : MonoBehaviour
+public class CellRotationController : MonoBehaviour
 {
     Animator anim;
 
@@ -12,33 +12,9 @@ public class IngredientRotationController : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    //public void SetRotation(InputController.SwipeDirection _direction)
-    //{
-    //    Vector3 rotation = new Vector3();
-    //    switch (_direction)
-    //    {
-    //        case InputController.SwipeDirection.Left:
-    //            rotation = new Vector3(0, 0, 180f);
-    //            break;
-    //        case InputController.SwipeDirection.Right:
-    //            rotation = new Vector3(0, 0, -180);
-    //            break;
-    //        case InputController.SwipeDirection.Up:
-    //            rotation = new Vector3(179.99f, 0, 0);
-    //            break;
-    //        case InputController.SwipeDirection.Down:
-    //            rotation = new Vector3(-180, 0, 0);
-    //            break;
-    //        default:
-    //            break;
-    //    }
-    //    SetRotation(rotation, 1);
-    //}
-
     void SetRotation(string _axis, int _direction)
     {
         anim.SetInteger(_axis, _direction);
-        //transform.DOLocalRotate(_finalRotation, _time);
     }
 
     public void SetRotation(InputController.SwipeDirection? _direction)
@@ -78,7 +54,5 @@ public class IngredientRotationController : MonoBehaviour
     public void ResetRotation()
     {
         SetRotation(null);
-        //Quaternion rotation = Quaternion.Euler(Vector3.zero);
-        //transform.rotation = rotation;
     }
 }

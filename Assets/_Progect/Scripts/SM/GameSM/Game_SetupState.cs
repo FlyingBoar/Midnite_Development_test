@@ -15,9 +15,11 @@ public class Game_SetupState : StateMachineBehaviour
 
         /// Get references to components
         GM.SetInputController(GM.GetComponent<InputController>());
+        GM.SetEventsContainer(new EventsContainer());
         GM.SetPoolManager(GM.GetComponentInChildren<PoolManager>());
         GM.SetGridController(GM.GetComponentInChildren<GridController>());
-        GM.SetIngredientsController(GM.GetComponent<IngredientsController>());
+        GM.SetIngredientsController(GM.GetComponentInChildren<IngredientsController>());
+        GM.SetNumbersController(GM.GetComponentInChildren<NumbersController>());
         GM.SetGameController(GM.GetComponent<GameController>());
         GM.SetUIManager(FindObjectOfType<UIManager>());
         DOTween.Init();
@@ -26,7 +28,12 @@ public class Game_SetupState : StateMachineBehaviour
         GM.GetInputController().Setup();
         GM.GetPoolManager().Setup();
         GM.GetGridController().Setup();
-        GM.GetIngredientsController().Setup();
+
+        if (GM.GetGameController().CurrentGameType == GameController.GameType.Ingredients)
+            GM.GetIngredientsController().Setup();
+        else
+            GM.GetNumbersController().Setup();
+        
         GM.GetUIManager().Setup();
 
         /// Move to next state of the State machine

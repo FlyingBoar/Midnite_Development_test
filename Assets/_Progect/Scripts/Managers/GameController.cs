@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
     public int MaxIngredientQuantity = 5;
     [SerializeField]
     public int FixedIngredientQuantity = 4;
+    [SerializeField]
+    public GameType CurrentGameType;
 
     /// <summary>
     /// Check victory conditions
@@ -20,11 +22,10 @@ public class GameController : MonoBehaviour
         {
             // Game Won;
             GameManager.I.GetUIManager().GameWon();
-            Debug.Log("Game Won!");
         }
         else
         {
-            // Do nothing
+            // Game Over
         }
     }
 
@@ -36,7 +37,7 @@ public class GameController : MonoBehaviour
     public void RebuildSameLevel()
     {
         UnsetupComponents();
-        GameManager.I.GetIngredientsController().RebuildLevel();
+        GameManager.I.GetEventsContainer().RebuildSameLevel();
     }
 
     /////////////////////////////////////////////
@@ -47,7 +48,7 @@ public class GameController : MonoBehaviour
     public void CreateNewLevel()
     {
         UnsetupComponents();
-        GameManager.I.GetIngredientsController().CreateRandomLevel();
+        GameManager.I.GetEventsContainer().CreateNewLevel();
     }
 
     /////////////////////////////////////////////
@@ -57,18 +58,21 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void SaveLevel()
     {
-        SaveManager.Save(GameManager.I.GetIngredientsController().GetIngredientsDisposition());
+        List<IngredientsController.IngredientDisposition> list = GameManager.I.GetEventsContainer().GetLevelInformationToSave();
+
+        if (list != null)
+            SaveManager.Save(GameManager.I.GetIngredientsController().GetIngredientsDisposition());
     }
-    
+
     /////////////////////////////////////////////
-    
+
     /// <summary>
     /// Call the function to load the last level saved
     /// </summary>
     public void LoadLastSave()
     {
         UnsetupComponents();
-        GameManager.I.GetIngredientsController().LoadLevel(SaveManager.LoadLastSavedData());
+        GameManager.I.GetEventsContainer().LoadLevel(SaveManager.LoadLastSavedData());
     }
 
     /////////////////////////////////////////////
@@ -81,7 +85,7 @@ public class GameController : MonoBehaviour
     {
         int value = FixedIngredientQuantity + 1;
         if (RandomizeIngredientQuantity)
-            value = Random.Range(4, MaxIngredientQuantity + 1);
+            value = UnityEngine.Random.Range(4, MaxIngredientQuantity + 1);
 
         return value;
     }
@@ -115,7 +119,7 @@ public class GameController : MonoBehaviour
         {
             for (int k = 0; k < cells.GetLength(1); k++)
             {
-                if (cells[j, k].GetIngredients().Count != 0)
+                if (cells[j, k].GetChildrens().Count != 0)
                 {
                     if (notEmptyCells == null)
                         notEmptyCells = cells[j, k];
@@ -126,9 +130,25 @@ public class GameController : MonoBehaviour
         }
 
         if (notEmptyCells != null)
-            if (notEmptyCells.GetFirstIngredient().MyType == Ingredient.IngredientType.Bread && notEmptyCells.GetLastIngredient().MyType == Ingredient.IngredientType.Bread)
-                value = true;
+        {
+            if (CurrentGameType == GameType.Ingredients)
+            {
+                if ((notEmptyCells.GetFirstChild() as Ingredient).MyType == Ingredient.IngredientType.Bread && (notEmptyCells.GetLastIngredient() as Ingredient).MyType == Ingredient.IngredientType.Bread)
+                    value = true;
+            }
+            else
+            {
+                if (notEmptyCells.GetChildrens().Count == 1)
+                    value = true;
+            }
+        }
 
         return value;
+    }
+
+    public enum GameType
+    {
+        Ingredients,
+        Numbers
     }
 }

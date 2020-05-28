@@ -74,7 +74,7 @@ public class PoolManagerCustomEditor : Editor
             _target.ObjectsToPool.Add(newPoolStruct);
         }
 
-        EditorUtility.SetDirty(this);
+        EditorUtility.SetDirty(_target);
     }
 
     private void DrawIDField(PoolStruct _currentItem)

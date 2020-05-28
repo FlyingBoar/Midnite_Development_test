@@ -13,4 +13,9 @@ public class Game_GameplayState : StateMachineBehaviour
 
         GM.GetUIManager().SetCurrentMenu(UIManager.MenuType.Gameplay);
     }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        GM.GetIngredientsController().Unsetup();
+    }
 }

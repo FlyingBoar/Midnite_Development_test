@@ -6,7 +6,7 @@ public class InputController : MonoBehaviour
 {
     public static bool CellInMotion;
 
-    [SerializeField] private float inputDeadZone;
+    [SerializeField] private float swipeDeadZone;
     private bool isDevice;
     private bool touchBegun;
     private bool inputInterruption;
@@ -169,7 +169,7 @@ public class InputController : MonoBehaviour
 
     bool CheckSwipeDistance(Vector3 _currentInputPosition)
     {
-        return VerticalMovementSwipe(_currentInputPosition) > inputDeadZone || HorizontalMovementSwipe(_currentInputPosition) > inputDeadZone;
+        return VerticalMovementSwipe(_currentInputPosition) > swipeDeadZone || HorizontalMovementSwipe(_currentInputPosition) > swipeDeadZone;
     }
 
     bool IsVerticalSwipe(Vector3 _currentInputPosition)

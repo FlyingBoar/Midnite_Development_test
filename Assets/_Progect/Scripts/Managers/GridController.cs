@@ -25,7 +25,7 @@ public class GridController : MonoBehaviour
         List<Cell> _neighbours = _cellToCheck.GetNeighbours();
         foreach (Cell c in _neighbours)
         {
-            if (c.GetIngredients().Count == 0)
+            if (c.GetChildrens().Count == 0)
             {
                 value = c;
                 break;
@@ -40,22 +40,19 @@ public class GridController : MonoBehaviour
     {
         Cell c = GetCellByDirection(_selectedCell, _direction);
         bool canSwipe = false;
-        if (_selectedCell != null || c != null)
-            if (_selectedCell.GetIngredients().Count > 0 && c.GetIngredients().Count > 0)
+        if (_selectedCell != null && c != null)
+            if (_selectedCell.GetChildrens().Count > 0 && c.GetChildrens().Count > 0)
             {
-                Vector3 newPos = new Vector3(c.GetWorldPosition().x, c.GetWorldPosition().y + c.GetIngredients().Count * Cell.ingredientOffset, c.GetWorldPosition().z);
+                Vector3 newPos = new Vector3(c.GetWorldPosition().x, c.GetWorldPosition().y + c.GetChildrens().Count * Cell.ingredientOffset, c.GetWorldPosition().z);
                 canSwipe = true;
 
-                _selectedCell.MoveIngredients(newPos, _direction, () =>
+                _selectedCell.MoveObjects(newPos, _direction, () =>
                 {
-                    if (_selectedCell.GetIngredients().Count > 1)
-                    {
-                        for (int i = _selectedCell.GetIngredients().Count - 1; i >= 0; i--)
-                            c.AddIngredient(_selectedCell.GetIngredients()[i]);
-                    }
-                    else
-                        c.AddIngredient(_selectedCell.GetIngredients()[0]);
+                    for (int i = _selectedCell.GetChildrens().Count - 1; i >= 0; i--)
+                        c.AddChild(_selectedCell.GetChildrens()[i]);
 
+                    if(GameManager.I.GetGameController().CurrentGameType == GameController.GameType.Numbers)
+                        c.CheckCombinations();
                     _selectedCell.ClearIngredients();
                     GameManager.I.GetGameController().CheckVictory();
                 });

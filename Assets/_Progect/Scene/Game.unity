@@ -436,7 +436,12 @@ PrefabInstance:
     - target: {fileID: 875222650270667877, guid: 5fb5e86d8d0153946a49fd8cb08e921c,
         type: 3}
       propertyPath: MaxIngredientQuantity
-      value: 7
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 875222651221460289, guid: 5fb5e86d8d0153946a49fd8cb08e921c,
+        type: 3}
+      propertyPath: ObjectsToPool.Array.data[10].inspectorExplandeToggle
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fb5e86d8d0153946a49fd8cb08e921c, type: 3}

@@ -10,34 +10,19 @@ public class NumbersController : MonoBehaviour
     public void Setup()
     {
         CreateRandomLevel();
+        GameManager.I.GetEventsContainer().OnCreateNewLevelEvent += CreateRandomLevel;
     }
 
     ////////////////////////////////////////////////////
 
     void CreateRandomLevel()
     {
+        RetrieveAllNumbers();
         List<Cell> freeCells = new List<Cell>();
         instantiatedNumbers.Clear();
 
         Cell firstCell = GameManager.I.GetGridController().GetRandomCell();
         freeCells.Add(firstCell);
-
-        //for (int i = 0; i < numbersForLevel; i++)
-        //{
-        //    int currentIndex = i;
-        //    Cell neighbourCell = null;
-        //    do
-        //    {
-        //        neighbourCell = GameManager.I.GetGridController().GetFreeCellFromNeighbours(freeCells[i]);
-        //        if (neighbourCell != null)
-        //        {
-        //            AddElemetToList(neighbourCell, GetRandomNum());
-        //            break;
-        //        }
-        //        else
-        //            currentIndex--;
-        //    } while (neighbourCell == null);
-        //}
 
         InstantiateTile(GetCell(freeCells[0]), 2);
         InstantiateTile(GetCell(freeCells[1]), 2);
@@ -58,7 +43,7 @@ public class NumbersController : MonoBehaviour
             return value;
         }
 
-        ///Function to instantiate the ingredient on the given cell
+        ///Function to instantiate the tile on the given cell
         void InstantiateTile(Cell _cellToAdd, int _number)
         {
             freeCells.Add(_cellToAdd);

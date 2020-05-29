@@ -178,8 +178,6 @@ public class Cell : MonoBehaviour
 
         bool CompleteCicle()
         {
-
-
             bool noMoreInteraction = true;
             int previousChildNumber = -1;
             for (int i = 0; i < GetChildrens().Count; i++)
@@ -189,8 +187,8 @@ public class Cell : MonoBehaviour
                     previousChildNumber = currentTile.MyValue;
                 else
                 {
-                    GameManager.I.GetPoolManager().RetrievePoollable(GetChildrens()[i - 1]);
                     currentTile.UpdateGraphic(currentTile.MyValue * 2);
+                    GameManager.I.GetPoolManager().RetrievePoollable(GetChildrens()[i - 1] as Tile);
                     GetChildrens().RemoveAt(i - 1);
                     i--;
 

@@ -20,6 +20,11 @@ public class TileBase : PoolObjectBase
     internal void RetrieveGraphic()
     {
         if (graphic != null)
+        {
+            Quaternion resetPosition = Quaternion.Euler(0, 180, 0);
+            graphic.transform.rotation = resetPosition;
             GameManager.I.GetPoolManager().RetrievePoollable(graphic.ID, graphic);
+            graphic = null;
+        }
     }
 }

@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RandomizeIngredientQuantity: 1
-  MaxIngredientQuantity: 7
+  MaxIngredientQuantity: 8
   FixedIngredientQuantity: 9
   CurrentGameType: 0
 --- !u!1 &875222650469636324
@@ -248,7 +248,7 @@ MonoBehaviour:
       type: 3}
     Quantity: 8
     ObjectStateOnRetrieve: 0
-  - inspectorExplandeToggle: 0
+  - inspectorExplandeToggle: 1
     ID: Tile
     Prefab: {fileID: 8585595676159063950, guid: f47a36c292af5ba4b804b624b21701bd,
       type: 3}
